@@ -1,21 +1,23 @@
-# Cross-Processor Quality Spread Across Sibling 156Q IBM Chips
+# How Processor Choice Affects Results Across Sibling 156-Qubit Chips
 
 *Portfolio Hub: [Prometheus Quantum Overview](https://github.com/PrometheusDynamicsCanada/prometheus-quantum-overview) · [Detailed Technical Report](DETAILED_TECHNICAL_REPORT.md) · [Evidence Index](EVIDENCE_INDEX.md)*
 
-## Introduction
+Cloud users often treat quantum processors from the same hardware generation as interchangeable and pick whichever queue is shortest. We tested how much output quality varies when the exact same 20-to-22-qubit dense circuits run across three sibling 156-qubit IBM Heron processors (IBM Fez, Marrakesh, and Kingston).
 
-- **The question:** How much does choosing *which* quantum processor runs a job change the result across sibling chips of the exact same `156`-qubit hardware generation?
-- **The test:** Using `33` archived raw IBM Quantum Job ZIP bundles (counted once in [`prometheus-quantum-and-gpu-benchmarks`](https://github.com/PrometheusDynamicsCanada/prometheus-quantum-and-gpu-benchmarks)) plus a `9`-qubit pre-committed selection test, we compared identical `20Q-22Q` dense workloads across `ibm_fez`, `ibm_marrakesh`, and `ibm_kingston`.
-- **The finding:** On the identical `20`-qubit dense circuit (`16,384` shots/arm), output-distribution agreement reached **`0.0981` on `ibm_kingston`** vs. **`0.0577` on `ibm_marrakesh`** and **`0.0357` on `ibm_fez`** (**`2.75x` observed cross-chip spread**). In the `9`-qubit prospective selection check, choosing the chip before execution beat fixed assignment on **`6/6`** (`marrakesh`/`fez`) and **`5/6`** (`kingston`) workloads.
-- **The significance:** Treating same-generation cloud QPUs as interchangeable leaves large quality differences on the table; compiler choice and chip choice interact.
-- **The boundary:** Broadcast runs (`20Q-22Q`) measure empirical spread rather than blind pre-selection, and at `21Q` (`kingston`) and `22Q` (`marrakesh`) SABRE O3 beat Prometheus on `1` of the `3` chips while Prometheus led the other `2`.
-- **The evidence:** Opening `20Q` cross-processor chart and `20Q-22Q` table below, with raw IBM Job ZIP verification underneath.
+On the identical 20-qubit dense circuit (16,384 shots per compiler), average output agreement reached 0.0981 on IBM Kingston versus 0.0577 on IBM Marrakesh and 0.0357 on IBM Fez - a 2.75x quality spread across chips of the same generation. In a separate 9-qubit prospective selection check, choosing the chip upfront from calibration data beat fixed chip assignment on 6 of 6 workloads against Fez and Marrakesh and 5 of 6 against Kingston.
+
+The 20-to-22-qubit broadcast runs measure observed cross-chip spread rather than blind pre-selection, and at 21 and 22 qubits Qiskit SABRE O3 led on one of the three chips while Prometheus led on the other two (using 33 raw IBM Job ZIP bundles shared with and counted once in `prometheus-quantum-and-gpu-benchmarks`).
+
+This repository contains the raw IBM Job archives, Studio UI captures, and offline verification tools across all 33 archived job bundles and the 144-execution selection suite.
 
 ![Same 20-Qubit Dense Workload Across Three Sibling IBM Processors](assets/fig0_opening_processor_spread.png)
-*Opening summary: Output-distribution agreement (`F_B`) on the identical 20-qubit dense circuit across `ibm_fez`, `ibm_marrakesh`, and `ibm_kingston` (`2.75x` spread).*
+*Summary figure: Output agreement on the identical 20-qubit dense circuit across IBM Fez, Marrakesh, and Kingston (2.75x cross-processor spread).*
+
+**[Read the detailed results](#detailed-results) · [Verify the data](#verify-the-data) · [Request an evaluation](https://prometheusdynamics.ca/connect/) · [Book a demonstration](mailto:william@prometheusdynamics.ca?subject=Prometheus%20Evaluation)**
 
 ---
 
+<a id="detailed-results"></a>
 ## Executive Summary (`20Q-22Q` Multi-QPU Broadcast: `9` Jobs, `27` Circuits, `442,368` Shots)
 
 | Workload | Processor | SABRE O3 $F_B$ `(↑)` | TKET $F_B$ `(↑)` | Prometheus $F_B$ `(↑)` | Best Strategy on Chip | Best Chip for Width |
@@ -30,11 +32,12 @@
 
 ---
 
+<a id="verify-the-data"></a>
 ## Inspect the Evidence & Reproduce Supported Checks Offline
 
 - **Command:** `python Fez_Marrakesh_Kingston/3_verify_and_view.py --dir Fez_Marrakesh_Kingston`
 - **Dependencies & measured runtime:** Python 3 standard library (`0` cloud credentials, **`~0.04 s`** measured runtime).
-- **Start a pilot:** [william@prometheusdynamics.ca](mailto:william@prometheusdynamics.ca) | [prometheusdynamics.ca](https://prometheusdynamics.ca)
+- **Request an evaluation or book a demonstration:** [prometheusdynamics.ca/connect](https://prometheusdynamics.ca/connect/) | [william@prometheusdynamics.ca](mailto:william@prometheusdynamics.ca?subject=Prometheus%20Evaluation)
 
 ---
 
